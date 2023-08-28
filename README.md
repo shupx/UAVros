@@ -42,7 +42,7 @@ Install mavros:
 ```bash
 sudo apt install ros-noetic-mavros ros-noetic-mavros-extras # for ubuntu 20
 # sudo apt install ros-melodic-mavros ros-melodic-mavros-extras  # for ubuntu 18
-wget https://gitee.com/shu-peixuan/px4mocap/blob/master/ROS-install-command/install_geographiclib_datasets.sh
+wget https://gitee.com/shu-peixuan/px4mocap/raw/85b46df9912338f775949903841160c873af4a1d/ROS-install-command/install_geographiclib_datasets.sh
 sudo chmod a+x ./install_geographiclib_datasets.sh
 sudo ./install_geographiclib_datasets.sh # this step takes some time
 ```
@@ -56,22 +56,8 @@ cd PX4-Autopilot
 git checkout v1.13.3 # or other version
 git submodule update --init --recursive
 bash Tools/setup/ubuntu.sh # This step takes some time. Make sure all dependencies are installed successfully!
-# reboot the computer, then:
+# Relogin or reboot the computer, then:
 make px4_sitl gazebo
-
-### if you use px4 version v1.13 or lower:
-echo "
-source ~/PX4-Autopilot/Tools/setup_gazebo.bash ~/PX4-Autopilot ~/PX4-Autopilot/build/px4_sitl_default
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/PX4-Autopilot
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/PX4-Autopilot/Tools/sitl_gazebo
-" >> ~/.bashrc
-
-### if you use px4 version v1.14:
-echo "
-source ~/PX4-Autopilot/Tools/simulation/gazebo-classic/setup_gazebo.bash ~/PX4-Autopilot ~/PX4-Autopilot/build/px4_sitl_default
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/PX4-Autopilot
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic
-" >> ~/.bashrc
 ```
 
 Install dependencies:
@@ -94,6 +80,7 @@ sudo apt install -y ros-noetic-plotjuggler-ros # curve plot and display
 # ROS noetic apt does not have ar-track-alvar, compile the local folder instead.
 
 ### optional
+sudo apt install python-is-python3 # if you use ubuntu20 but with default python2
 sudo apt-get install llvm # install numba on X86 ubuntu for KCF tracking
 pip install llvmlite # install numba on X86 ubuntu for KCF tracking
 pip install numba # install numba on X86 ubuntu for KCF tracking
@@ -107,7 +94,28 @@ cd ~
 git clone https://gitee.com/shu-peixuan/UAVros.git
 cd UAVros/
 ./compile_all.sh
+```
+
+Add source path in `~/.bashrc`:
+
+```bash
+### Add UAVros package path:
 echo "source ~/UAVros/devel/setup.bash" >> ~/.bashrc
+
+### Add px4 path:
+# if you use px4 version v1.13 or lower:
+echo "
+source ~/PX4-Autopilot/Tools/setup_gazebo.bash ~/PX4-Autopilot ~/PX4-Autopilot/build/px4_sitl_default
+export ROS_PACKAGE_PATH=\$ROS_PACKAGE_PATH:~/PX4-Autopilot
+export ROS_PACKAGE_PATH=\$ROS_PACKAGE_PATH:~/PX4-Autopilot/Tools/sitl_gazebo
+" >> ~/.bashrc
+
+# if you use px4 version v1.14:
+echo "
+source ~/PX4-Autopilot/Tools/simulation/gazebo-classic/setup_gazebo.bash ~/PX4-Autopilot ~/PX4-Autopilot/build/px4_sitl_default
+export ROS_PACKAGE_PATH=\$ROS_PACKAGE_PATH:~/PX4-Autopilot
+export ROS_PACKAGE_PATH=\$ROS_PACKAGE_PATH:~/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic
+" >> ~/.bashrc
 ```
 
 
@@ -261,7 +269,7 @@ Procedures:
 3. The states of the gimbals can be controlled and read by:
 
     ```bash
-    # echo gimbal angle of uav0
+    # echo gimbal angle of uav0 (imu_angle follows RPY and rotor angle follows the gimbal configuration PRY)
     rostopic echo /uav0/amov_gimbal_ros/gimbal_state
     
     # gimbal angle control of uav0 (angle rate control is invalid):
@@ -280,7 +288,7 @@ Procedures:
     # gimbal image of uav0
     rostopic hz /uav0/amov_gimbal_ros/gimbal_image
     ```
-    The gimbal angle is limited by roll [-45,45], pitch [90, -30] and yaw [-60, 60] degrees, where the roll and pitch are controlled as imu angle and yaw as rotor angle.
+    The gimbal angle is limited by roll [-45,45], pitch [-90, 30] and yaw [-80, 80] degrees, where the roll and pitch are controlled as imu angle and yaw as rotor angle.
 
 4. You can use QGroundControl to arm and launch vehicle or your mavros scripts to control the UAV flight and gimbals.
 

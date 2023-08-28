@@ -72,19 +72,39 @@ class GimbalForward:
                 qz = response.link_state.pose.orientation.z
                 qw = response.link_state.pose.orientation.w
                 euler = euler_from_quaternion([qx, qy, qz, qw])
-                self.cam_imu_roll = -euler[0] * 180 / 3.1415926 # deg
-                self.cam_imu_pitch = euler[1] * 180 / 3.1415926 # deg
-                self.cam_imu_yaw = euler[2] * 180 / 3.1415926 # deg
+                self.cam_imu_roll = euler[0] * 180 / 3.1415926 # deg (Forward)
+                self.cam_imu_pitch = -euler[1] * 180 / 3.1415926 # deg (Right)
+                self.cam_imu_yaw = -euler[2] * 180 / 3.1415926 # deg (Down)
 
-                response = self.gazebo_link_state(self.vehicle_type+'_'+str(self.vehicle_id)+'::cgo3_camera_link', self.vehicle_type+'_'+str(self.vehicle_id)+'::cgo3_mount_link')   
+                response = self.gazebo_link_state(self.vehicle_type+'_'+str(self.vehicle_id)+'::cgo3_camera_link', self.vehicle_type+'_'+str(self.vehicle_id)+'::cgo3_horizontal_arm_link')   
                 qx = response.link_state.pose.orientation.x
                 qy = response.link_state.pose.orientation.y
                 qz = response.link_state.pose.orientation.z
                 qw = response.link_state.pose.orientation.w
                 euler = euler_from_quaternion([qx, qy, qz, qw])
-                self.cam_rotor_roll = -euler[0] * 180 / 3.1415926 # deg
-                self.cam_rotor_pitch = euler[1] * 180 / 3.1415926 # deg
-                self.cam_rotor_yaw = euler[2] * 180 / 3.1415926 # deg                           
+                # self.cam_rotor_roll = -euler[0] * 180 / 3.1415926 # deg (Back)
+                self.cam_rotor_pitch = -euler[1] * 180 / 3.1415926 # deg (Right)
+                # self.cam_rotor_yaw = -euler[2] * 180 / 3.1415926 # deg (Down)     
+
+                response = self.gazebo_link_state(self.vehicle_type+'_'+str(self.vehicle_id)+'::cgo3_horizontal_arm_link', self.vehicle_type+'_'+str(self.vehicle_id)+'::cgo3_vertical_arm_link')   
+                qx = response.link_state.pose.orientation.x
+                qy = response.link_state.pose.orientation.y
+                qz = response.link_state.pose.orientation.z
+                qw = response.link_state.pose.orientation.w
+                euler = euler_from_quaternion([qx, qy, qz, qw])
+                self.cam_rotor_roll = -euler[0] * 180 / 3.1415926 # deg (Back)
+                # self.cam_rotor_pitch = -euler[1] * 180 / 3.1415926 # deg (Right)
+                # self.cam_rotor_yaw = -euler[2] * 180 / 3.1415926 # deg (Down)     
+
+                response = self.gazebo_link_state(self.vehicle_type+'_'+str(self.vehicle_id)+'::cgo3_vertical_arm_link', self.vehicle_type+'_'+str(self.vehicle_id)+'::cgo3_mount_link')   
+                qx = response.link_state.pose.orientation.x
+                qy = response.link_state.pose.orientation.y
+                qz = response.link_state.pose.orientation.z
+                qw = response.link_state.pose.orientation.w
+                euler = euler_from_quaternion([qx, qy, qz, qw])
+                # self.cam_rotor_roll = -euler[0] * 180 / 3.1415926 # deg (Back)
+                # self.cam_rotor_pitch = -euler[1] * 180 / 3.1415926 # deg (Right)
+                self.cam_rotor_yaw = -euler[2] * 180 / 3.1415926 # deg (Down)                                          
             except:
                 print("Gazebo model state service call failed for one loop")
 
@@ -102,13 +122,26 @@ class GimbalForward:
         
     def gimbal_control_cb(self, msg):
         self.cmd_mode = msg.mode
-        self.cmd_roll = -msg.roll_angle # solo_gimbal.sdf model limits roll at [-45,45]deg
-        self.cmd_pitch = -msg.pitch_angle  # solo_gimbal.sdf model limits pitch at [-30,90]deg
-        self.cmd_yaw = -msg.yaw_angle  # solo_gimbal.sdf model limits yaw at [-inf, inf]deg
-        if self.cmd_yaw > 60: 
-            self.cmd_yaw = 60 # limit yaw rotor angle
-        if self.cmd_yaw < -60:
-            self.cmd_yaw = -60 # limit yaw rotor angle
+        self.cmd_roll = msg.roll_angle # solo_gimbal.sdf model limits rotor roll at [-45,45]deg (Forward)
+        self.cmd_pitch = msg.pitch_angle  # solo_gimbal.sdf model limits rotor pitch at [-120,40]deg (Right)
+        self.cmd_yaw = msg.yaw_angle  # solo_gimbal.sdf model limits rotor yaw at [-inf, inf]deg (Down)
+
+        # limit roll imu controll angle
+        if self.cmd_roll > 45.0: 
+            self.cmd_roll = 45.0
+        if self.cmd_roll < -45.0:
+            self.cmd_roll = -45.0
+        # limit pitch imu controll angle
+        if self.cmd_pitch > 30.0: 
+            self.cmd_pitch = 30.0
+        if self.cmd_pitch < -89.9:
+            self.cmd_pitch = -89.9
+        # limit yaw rotor control angle
+        if self.cmd_yaw > 80: 
+            self.cmd_yaw = 80
+        if self.cmd_yaw < -80:
+            self.cmd_yaw = -80
+        
         self.cmd_roll_rate = msg.roll_rate
         self.cmd_roll_rate = msg.pitch_rate
         self.cmd_yaw_rate = msg.yaw_rate    
