@@ -269,7 +269,7 @@ Procedures:
 3. The states of the gimbals can be controlled and read by:
 
     ```bash
-    # echo gimbal angle of uav0 (imu_angle follows RPY and rotor angle follows the gimbal configuration PRY)
+    # echo gimbal angle of uav0 (imu_angle follows FRD and rotor angle follows the gimbal configuration BRD)
     rostopic echo /uav0/amov_gimbal_ros/gimbal_state
     
     # gimbal angle control of uav0 (angle rate control is invalid):
@@ -288,7 +288,11 @@ Procedures:
     # gimbal image of uav0
     rostopic hz /uav0/amov_gimbal_ros/gimbal_image
     ```
-    The gimbal angle is limited by roll [-45,45], pitch [-90, 30] and yaw [-80, 80] degrees, where the roll and pitch are controlled as imu angle and yaw as rotor angle.
+    The gimbal angle is limited by roll [-45,45], pitch [-90, 30] and yaw [-80, 80] degrees, where the roll and pitch are controlled as inertial angle and yaw as rotor angle.
+
+    `imu_angle` in the gimbal_state topic follows **FRD** (forward-right-down) right-hand coordination frame，and the euler angle sequence is **RPY** (roll-pitch-yaw).
+
+    `rotor_angle` in the gimbal_state topic follows **BRD** (back-right-down) right-hand coordination frame，and the rotor angle sequence follows the gimbal construction **PRY** (pitch-roll-yaw).
 
 4. You can use QGroundControl to arm and launch vehicle or your mavros scripts to control the UAV flight and gimbals.
 
