@@ -10,7 +10,7 @@ FLT_EPSILON = 1e-07
 @jit
 def func1(dx, dy, boundary_x, boundary_y, height, width, numChannels):
     r = np.zeros((height, width), np.float32)
-    alfa = np.zeros((height, width, 2), np.int)
+    alfa = np.zeros((height, width, 2), int) # int change from np.int by spx
 
     for j in range(1, height-1):
         for i in range(1, width-1):
@@ -167,7 +167,7 @@ def getFeatureMaps(image, k, mapp):
 	r, alfa = func1(dx, dy, boundary_x, boundary_y, height, width, numChannels) #with @jit
 	### ~0.001s
 
-	nearest = np.ones((k), np.int)
+	nearest = np.ones((k), int) # int change from np.int by spx
 	nearest[0:k//2] = -1
 
 	w = np.zeros((k, 2), np.float32)
