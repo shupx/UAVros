@@ -1,0 +1,46 @@
+<launch>
+
+    <arg name="ns0" value= "uav0"/>
+    <arg name="ns1" value= "uav1"/>
+    <arg name="ns2" value= "uav2"/>
+    <arg name="target_x" value= "1"/>
+    <arg name="target_y" value= "10"/>
+
+    <group ns="$(arg ns0)">
+
+        <!-- Function node -->
+       <node pkg="uavros_multi_gimbal_sitl" type="target_point.py" name="target_point" output="screen">
+            <param name="init_x" value = "-2"/>
+            <param name="init_y" value = "0"/>
+            <param name="target_x" value = "$(arg target_x)"/>
+            <param name="target_y" value = "$(arg target_y)"/>
+        </node>
+        
+    </group>
+
+
+    <group ns="$(arg ns1)">
+
+        <!-- Function node -->
+       <node pkg="uavros_multi_gimbal_sitl" type="target_point.py" name="target_point" >
+            <param name="init_x" value = "2"/>
+            <param name="init_y" value = "2"/>
+            <param name="target_x" value = "$(arg target_x)"/>
+            <param name="target_y" value = "$(arg target_y)"/>
+        </node>
+        
+    </group>
+    
+    <group ns="$(arg ns2)">
+
+        <!-- Function node -->
+       <node pkg="uavros_multi_gimbal_sitl" type="target_point.py" name="target_point" >
+            <param name="init_x" value = "2"/>
+            <param name="init_y" value = "-2"/>
+            <param name="target_x" value = "$(arg target_x)"/>
+            <param name="target_y" value = "$(arg target_y)"/>
+        </node>
+        
+    </group>
+
+</launch>

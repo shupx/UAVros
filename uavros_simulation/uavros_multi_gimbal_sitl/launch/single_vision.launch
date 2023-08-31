@@ -6,7 +6,7 @@
     <arg name="target_x" value= "1"/>
     <arg name="target_y" value= "10"/>
 
-    <group ns="$(arg ns1)">
+    <group ns="$(arg ns0)">
 
         <!-- Function node -->
         <node pkg="uavros_multi_gimbal_sitl" type="car_number_detect_relate.py" name="car_number_detect_relate" output="screen">

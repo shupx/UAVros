@@ -1,4 +1,12 @@
 <launch>
+    <arg name="K_p"                                  default="5"/>
+    <arg name="K_i"                                  default="0.0"/>
+    <arg name="K_d"                                  default="0.0"/>
+    <arg name="max_rate"                             default="60"/>
+    <arg name="target_x" value= "1"/>
+    <arg name="target_y" value= "10"/>
+
+
 
     <arg name="world" default="$(find uavros_gazebo)/worlds/empty.world"/>
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -12,9 +20,19 @@
     <!-- <include file="$(find nexus_4wd_mecanum_gazebo)/launch/spawn_one_nexus_4wd_mecanum.launch"> -->
     <include file="$(find nexus_4wd_mecanum_gazebo)/launch/spawn_one_nexus_4wd_mecanum.launch">
         <arg name="robot_name" value="ugv0" />
-        <arg name="pose_x" value="3" />
-        <arg name="pose_y" value="2" />
+        <arg name="pose_x" value="$(arg target_x)" />
+        <arg name="pose_y" value="$(arg target_y)" />
     </include>
+
+    <group ns="ugv0">
+        <node pkg="uavros_gazebo" type="gazebo_modelpos_publisher.py" name="gazebo_modelpos_publisher" output="screen">
+            <param name="modelname" value = "ugv0"/>
+            <param name="linkname" value = "base_footprint"/>
+        </node>
+
+        <node pkg="nexus_4wd_mecanum_gazebo" type="mecanum_single_control.py" name="mecanum_single_control" output="screen">
+        </node>
+    </group>
 
     <arg name="ns0" value= "uav0"/>
     <arg name="ns1" value= "uav1"/>
@@ -52,7 +70,15 @@
             <param name="model_name" value = "solo_gimbal"/>
             <param name="model_id" value = "$(arg ID)"/>
         </node>
+
+
         <!-- Function node -->
+
+        <node pkg="uavros_gazebo" type="gazebo_modelpos_publisher.py" name="gazebo_modelpos_publisher" output="screen">
+            <param name="modelname" value = "solo_gimbal_0"/>
+            <param name="linkname" value = "base_link"/>
+        </node>
+      
     </group>
 
     <group ns="$(arg ns1)">
@@ -87,7 +113,15 @@
             <param name="model_name" value = "solo_gimbal"/>
             <param name="model_id" value = "$(arg ID)"/>
         </node>
+
         <!-- Function node -->
+
+         
+        <node pkg="uavros_gazebo" type="gazebo_modelpos_publisher.py" name="gazebo_modelpos_publisher" output="screen">
+            <param name="modelname" value = "solo_gimbal_1"/>
+            <param name="linkname" value = "base_link"/>
+        </node>
+
     </group>
 
 

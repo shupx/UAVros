@@ -1,0 +1,31 @@
+include doc/conf.py
+include doc/*.rst
+include doc/Makefile
+
+include pycuda/cuda/*.hpp
+
+include src/cpp/*.hpp
+include src/cpp/*.cpp
+include src/wrapper/*.hpp
+include src/wrapper/*.cpp
+include test/*.py
+recursive-include examples *.py
+
+include doc/source/*.rst
+include doc/Makefile
+include doc/source/conf.py
+include doc/source/_static/*.css
+include doc/source/_templates/*.html
+
+include configure.py
+include Makefile.in
+include aksetup_helper.py
+include README_SETUP.txt
+include README.rst
+include CITATION.cff
+include LICENSE
+
+recursive-include pycuda *.pyx
+
+recursive-include bpl-subset/bpl_subset/boost *.h *.hpp *.cpp *.html *.inl *.ipp *.pl *.txt
+recursive-include bpl-subset/bpl_subset/libs *.h *.hpp *.cpp *.html *.inl *.ipp *.pl *.txt

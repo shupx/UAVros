@@ -1,0 +1,17 @@
+<launch>
+
+    <arg name="ns0" value= "uav0"/>
+    <arg name="ns1" value= "uav1"/>
+    <arg name="ns2" value= "uav2"/>
+
+    <group ns="$(arg ns0)">
+
+        <node pkg="uavros_multi_gimbal_sitl" type="uav_controller_node" name="uav_controller" output="screen">
+            <rosparam command="load" file="$(find uavros_multi_gimbal_sitl)/config/tracking_param_sitl.yaml" />
+            <param name="uav_number" value = "1"/>
+        </node>
+
+
+    </group>
+
+</launch>

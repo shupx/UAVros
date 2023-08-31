@@ -202,6 +202,10 @@ include_directories(
 catkin_install_python(PROGRAMS
    scripts/gimbal_control.py
    scripts/car_number_detect_relate.py
+   scripts/manager_node.py
+   scripts/traj_planner_node.py
+   scripts/traj_planner.py
+   scripts/target_point.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
