@@ -1,96 +1,17 @@
 <launch>
-    <arg name="K_p"                                  default="5"/>
-    <arg name="K_i"                                  default="0.0"/>
-    <arg name="K_d"                                  default="0.0"/>
-    <arg name="max_rate"                             default="60"/>
-    <arg name="target_x" value= "1"/>
-    <arg name="target_y" value= "10"/>
-
-
-
-    <arg name="world" default="$(find uavros_gazebo)/worlds/empty.world"/>
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(arg world)"/>
-    </include>
-
-    <arg name="vehicle" default="solo_gimbal"/>
-  	<arg name="sdf" default="$(find uavros_gazebo)/models/solo_gimbal/solo_gimbal.sdf"/>
-
-    <!-- spawn "ugv0" robot -->
-    <!-- <include file="$(find nexus_4wd_mecanum_gazebo)/launch/spawn_one_nexus_4wd_mecanum.launch"> -->
-    <include file="$(find nexus_4wd_mecanum_gazebo)/launch/spawn_one_nexus_4wd_mecanum.launch">
-        <arg name="robot_name" value="ugv0" />
-        <arg name="pose_x" value="$(arg target_x)" />
-        <arg name="pose_y" value="$(arg target_y)" />
-    </include>
-
-    <group ns="ugv0">
-        <node pkg="uavros_gazebo" type="gazebo_modelpos_publisher.py" name="gazebo_modelpos_publisher" output="screen">
-            <param name="modelname" value = "ugv0"/>
-            <param name="linkname" value = "base_footprint"/>
-        </node>
-
-        <node pkg="nexus_4wd_mecanum_gazebo" type="mecanum_single_control.py" name="mecanum_single_control" output="screen">
-        </node>
-    </group>
 
     <arg name="ns0" value= "uav0"/>
     <arg name="ns1" value= "uav1"/>
     <arg name="ns2" value= "uav2"/>
+    <arg name="target_x" value= "1"/>
+    <arg name="target_y" value= "10"/>
 
-    <group ns="$(arg ns0)">
-        <arg name="ID" value="0"/>
-        <arg name="cam_namespace" value="$(arg ns0)"/>
-        <arg name="fcu_url" default="udp://:1454$(arg ID)@localhost:1458$(arg ID)"/>
-        <!-- PX4 SITL and vehicle spawn -->
-        <include file="$(find uavros_gazebo)/launch/single_solo_gimbal.launch">
-            <arg name="x" value="0"/>
-            <arg name="y" value="0"/>
-            <arg name="z" value="0"/>
-            <arg name="R" value="0"/>
-            <arg name="P" value="0"/>
-            <arg name="Y" value="0"/> <!-- should be 0 for gimbal initialization-->
-            <arg name="vehicle" value="$(arg vehicle)"/> <!--add by spx-->
-            <arg name="sdf" value="$(arg sdf)"/> <!--add by spx-->
-            <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))"/>
-            <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))"/>
-            <arg name="udp_gimbal_port_remote" value="$(eval 13030 + arg('ID'))"/> <!--add by spx-->
-            <arg name="cam_namespace" value="$(arg cam_namespace)"/> <!--add by spx-->
-            <arg name="ID" value="$(arg ID)"/>
-        </include>
-        <!-- MAVROS -->
-        <include file="$(find mavros)/launch/px4.launch">
-            <arg name="fcu_url" value="$(arg fcu_url)"/>
-            <arg name="gcs_url" value=""/>
-            <arg name="tgt_system" value="$(eval 1 + arg('ID'))"/>
-            <arg name="tgt_component" value="1"/>
-        </include>
-        <!-- Gimbal topic forward node -->
-        <node pkg="uavros_gazebo" type="gimbal_topic_forward.py" name="gimbal_topic_forward" output="screen">
-            <param name="model_name" value = "solo_gimbal"/>
-            <param name="model_id" value = "$(arg ID)"/>
-        </node>
-
+    <group ns="$(arg ns1)">
 
         <!-- Function node -->
-
-        <node pkg="uavros_gazebo" type="gazebo_modelpos_publisher.py" name="gazebo_modelpos_publisher" output="screen">
-            <param name="modelname" value = "solo_gimbal_0"/>
-            <param name="linkname" value = "base_link"/>
-        </node>   
-
+        <node pkg="uavros_multi_gimbal_sitl" type="car_number_detect_relate.py" name="car_number_detect_relate" output="screen">
+        </node>
+        
     </group>
-
-  <arg name="visualization" default="true"/>
-  <group if="$(arg visualization)">
-      <node type="rviz" name="rviz" pkg="rviz" args="-d $(find uavros_multi_gimbal_sitl)/config/rviz_gimbal_images.rviz" />
-  </group>
-
-  <arg name="rqt_image" default="false"/>
-  <group if="$(arg rqt_image)">
-    <node pkg="rqt_image_view" type="rqt_image_view" name="rqt_image_view1" output="screen">
-    </node>
-  </group>
-
 
 </launch>
