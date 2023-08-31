@@ -9,10 +9,15 @@ project(uavros_multi_gimbal_sitl)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
+  cv_bridge
+  message_filters
   roscpp
   rospy
+  sensor_msgs
   std_msgs
   uavros_msgs
+  actionlib
+  actionlib_msgs
 )
 
 #uncomment the following 4 lines to use the Eigen library
@@ -67,7 +72,16 @@ add_definitions(${EIGEN_DEFINITIONS})
 #   Service1.srv
 #   Service2.srv
 # )
+add_action_files(
+    FILES
+    Plan.action
+)
 
+# # Generate added messages and services with any dependencies listed here
+generate_messages(
+    DEPENDENCIES
+    actionlib_msgs
+)
 ## Generate actions in the 'action' folder
 # add_action_files(
 #   FILES
@@ -164,7 +178,7 @@ include_directories(
 
 # add_executable(uav_controller_node 
 #                   src/uav_controller_node.cpp
-#                   src/uav_controller.cpp)
+#                    src/uav_controller.cpp)
 
 #add_dependencies(uav_controller_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 # target_link_libraries(uav_controller_node ${catkin_LIBRARIES})
@@ -185,10 +199,12 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-# catkin_install_python(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+catkin_install_python(PROGRAMS
+   scripts/gimbal_control.py
+   scripts/car_number_detect_relate.py
+   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
