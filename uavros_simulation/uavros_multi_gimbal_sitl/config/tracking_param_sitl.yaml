@@ -1,0 +1,51 @@
+##Parameter for uav_controller.cpp
+loop_sec : 0.05
+Mission_sec : 380.0
+
+auto_arm : true
+en_preset_mode : true
+en_yaw_rotate : true
+
+lost_sec_thre : 20.0
+v_thres_yawrotate : 1.7 # m/s
+
+arrive_alt : 1.5
+track_alt : 1.5
+
+hover_yaw_rad : -2.283 #-3.1415 ~ 3.1415
+
+vxy_max : 2.0
+acc_max : 100.0
+Kp : 0.8
+Ki : 0.0
+Kd : 0.0
+
+car_initLat_deg : 47.3978
+car_initLon_deg : 8.54559
+# car_initLat_deg : 47.3977614
+# car_initLon_deg : 8.5456246
+# car_initLat_deg : 47.3979154
+# car_initLon_deg : 8.5458607
+
+car_Lat1_ : 39.5369080
+car_Lon1_ : 115.6932544
+
+car_Lat2_ : 39.5367311
+car_Lon2_ : 115.6924968
+
+car_Lat3_ : 39.5364294
+car_Lon3_ : 115.6925886
+
+car_Lat4_ : 39.5364348
+car_Lon4_ : 115.6933328
+
+car_Lat5_ : 39.5359950
+car_Lon5_ : 115.6933581
+
+car_Lat6_ : 39.5358763
+car_Lon6_ : 115.6940832
+
+car_Lat7_ : 39.5360636
+car_Lon7_ : 115.6947293
+
+
