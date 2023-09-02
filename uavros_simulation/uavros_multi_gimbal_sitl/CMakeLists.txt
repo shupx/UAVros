@@ -72,16 +72,17 @@ add_definitions(${EIGEN_DEFINITIONS})
 #   Service1.srv
 #   Service2.srv
 # )
-add_action_files(
-    FILES
-    Plan.action
-)
+
+# add_action_files(
+#    FILES
+#    Plan.action
+#)
 
 # # Generate added messages and services with any dependencies listed here
-generate_messages(
-    DEPENDENCIES
-    actionlib_msgs
-)
+#generate_messages(
+#    DEPENDENCIES
+#    actionlib_msgs
+#)
 ## Generate actions in the 'action' folder
 # add_action_files(
 #   FILES
@@ -200,12 +201,12 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
-   scripts/gimbal_control.py
-   scripts/car_number_detect_relate.py
-   scripts/manager_node.py
-   scripts/traj_planner_node.py
-   scripts/traj_planner.py
-   scripts/target_point.py
+   script/gimbal_control.py
+   script/car_number_detect_relate.py
+#   script/manager_node.py
+#   script/traj_planner_node.py
+#   script/traj_planner.py
+#   script/target_point.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
