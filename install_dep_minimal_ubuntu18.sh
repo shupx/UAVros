@@ -15,7 +15,8 @@ sudo ./install_geographiclib_datasets.sh # this step takes some time
 rm install_geographiclib_datasets.sh
 
 ### install some ros package
-sudo apt install -y ros-melodic-gazebo-ros # gazebo-ros
+sudo apt install -y ros-melodic-gazebo-ros # gazebo-ros. may be needed by uavros_gazebo build
+sudo apt install -y ros-melodic-gazebo-plugins # in case of camera image lose (lack gazebo plugin)
 sudo apt install -y ros-melodic-ackermann-msgs 
 sudo apt install -y ros-melodic-usb-cam 
 sudo apt install -y ros-melodic-image-proc 
