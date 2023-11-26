@@ -1,3 +1,8 @@
+#!/bin/sh
+
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
 # basic messages
 catkin_make --source uavros_msgs --build build/uavros_msgs
 
