@@ -9,7 +9,7 @@ sudo apt install xmlstarlet # generate multiple UAV sdf model
 
 ### install mavros
 sudo apt install ros-melodic-mavros ros-melodic-mavros-extras  # for ubuntu 18
-wget https://gitee.com/shu-peixuan/px4mocap/raw/85b46df9912338f775949903841160c873af4a1d/ROS-install-command/install_geographiclib_datasets.sh
+wget https://gitee.com/shu-peixuan/ros-install-command/raw/c9865c748045a0cce0173fcfcb95729784bd31e5/install_geographiclib_datasets.sh
 sudo chmod a+x ./install_geographiclib_datasets.sh
 sudo ./install_geographiclib_datasets.sh # this step takes some time
 rm install_geographiclib_datasets.sh
